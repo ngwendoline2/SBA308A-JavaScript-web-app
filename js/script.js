@@ -47,6 +47,20 @@ const parks = [
     },
   ];
   
+  // app.js (Modified Version)
+import { searchParks, submitComment } from './uiService.js';
+
+// Existing event listener for search...
+
+// Example of setting up an event listener for comment submission
+// Assume there's a form with `id="commentForm"` and inputs for parkId, userName, and userComment
+document.getElementById('commentForm').addEventListener('submit', event => {
+  event.preventDefault(); // Prevent form from submitting in the traditional way
+  const parkId = document.getElementById('parkId').value;
+  const userName = document.getElementById('userName').value;
+  const userComment = document.getElementById('userComment').value;
+  submitComment(parkId, userName, userComment);
+});
   export { parks };
 
 // Event listener for button click
@@ -90,21 +104,25 @@ parkData.forEach(park => {
     });
 });
 
-// cript.js
-import { listParks, findParkByName } from './parksFunctions.js';
+// // api.js
+// uiService.js (Expanded Version)
+import { fetchParks, postComment } from './apiService.js';
 
-console.log("National Parks:");
-console.log(listParks());
+// Existing functions...
 
-const search = "Yosemite";
-console.log(`Searching for: ${search}`);
-const park = findParkByName(search);
-if (park) {
-  console.log(`Found: ${park.name} National Park, established on ${park.established}`);
-} else {
-  console.log("Park not found.");
+async function submitComment(parkId, userName, userComment) {
+  const comment = {
+    author: userName,
+    text: userComment,
+  };
+  const response = await postComment(parkId, comment);
+  if (response) {
+    console.log('Comment posted successfully:', response);
+    // could update the UI to show the newly added comment
+  }
 }
 
+export { searchParks, submitComment };
 
 var data = [
 	{
