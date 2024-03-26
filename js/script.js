@@ -71,23 +71,23 @@ document.getElementById('showInfoBtn').addEventListener('click', () => {
     displayParksInDropdown(parkCode);
 });
 
-// apiService.js
-const API_URL = "https://api.thecatapi.com/v1/images/search"
-const API_KEY = 'live_j62f1ot1i7dwTJ3SR66xT2e3D7SjYYUq0a67e1DgMGQRROAR9CHNDArFu9UMQMpx'; 
+// // apiService.js
+// const API_URL = "https://api.thecatapi.com/v1/images/search"
+// const API_KEY = 'live_j62f1ot1i7dwTJ3SR66xT2e3D7SjYYUq0a67e1DgMGQRROAR9CHNDArFu9UMQMpx'; 
 
-async function fetchParks(stateCode, limit = 10, start = 1) {
-  const url = `${BASE_URL}?stateCode=${stateCode}&limit=${limit}&start=${start}&api_key=${API_KEY}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Fetch error: ", error);
-  }
-}
+// async function fetchParks(stateCode, limit = 10, start = 1) {
+//   const url = `${BASE_URL}?stateCode=${stateCode}&limit=${limit}&start=${start}&api_key=${API_KEY}`;
+//   try {
+//     const response = await fetch(url);
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok');
+//     }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Fetch error: ", error);
+//   }
+// }
 window.addEventListener('DOMContentLoaded', async () => {
     const selectedPark = document.getElementById('selectedPark');
     const parkData = await fetchParkData();
@@ -196,7 +196,7 @@ document.getElementById('commentForm').addEventListener('submit', event => {
   const userComment = document.getElementById('userComment').value;
   submitComment(parkId, userName, userComment);
 });
-import { searchParks, submitComment } from './fetchpark.js';
+import { searchParks, submitComment } from './fetchParks.js';
 
 var data = [
 	{
