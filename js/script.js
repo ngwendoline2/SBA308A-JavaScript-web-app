@@ -1,3 +1,4 @@
+
 // ParksFunctions.js
 import { fetchParkData } from './fetchParks.js';
 import { displayParksInDropdown } from './displayData.js'; 
@@ -12,7 +13,7 @@ function findParkByName(name) {
 }
 
 // app.js
-import { searchParks } from './uiService.js';
+import { searchParks } from './displayData.js';
 
 document.getElementById('searchForm').addEventListener('submit', event => {
   event.preventDefault(); // Prevent form from submitting traditionally
@@ -48,7 +49,7 @@ const parks = [
   ];
   
   // app.js (Modified Version)
-import { searchParks, submitComment } from './uiService.js';
+import { searchParks, submitComment } from './displayData.js';
 
 // Existing event listener for search...
 
@@ -71,8 +72,8 @@ document.getElementById('showInfoBtn').addEventListener('click', () => {
 });
 
 // apiService.js
-const API_KEY = 'your_api_key_here'; // Replace with your actual API key
-const BASE_URL = 'https://developer.nps.gov/api/v1/parks';
+const API_URL = "https://api.thecatapi.com/v1/images/search"
+const API_KEY = 'live_j62f1ot1i7dwTJ3SR66xT2e3D7SjYYUq0a67e1DgMGQRROAR9CHNDArFu9UMQMpx'; 
 
 async function fetchParks(stateCode, limit = 10, start = 1) {
   const url = `${BASE_URL}?stateCode=${stateCode}&limit=${limit}&start=${start}&api_key=${API_KEY}`;
@@ -106,7 +107,7 @@ parkData.forEach(park => {
 
 // // api.js
 // uiService.js (Expanded Version)
-import { fetchParks, postComment } from './apiService.js';
+import { fetchParks, postComment } from './parksData.js';
 
 // Existing functions...
 
@@ -121,8 +122,81 @@ async function submitComment(parkId, userName, userComment) {
     // could update the UI to show the newly added comment
   }
 }
+// app.js (Modified Version)
+import { searchParks, submitComment } from './displayData.js';
+// Function to fetch park data using Promises directly
+async function fetchParkData(parkId) {
+    const url = `https://www.nps.gov/yell/planyourvisit/serviceanimals.htm/api/parks/${parkId}`;
+    return fetch(url) // fetch returns a Promise
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // .json() returns a Promise
+      })
+      .then(data => {
+        console.log('Park data:', data);
+        return data; // Pass the park data for further processing or return it
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+  }
 
-export { searchParks, submitComment };
+// Existing event listener for search...
+import { fetchParkData } from './fetchParks.js';
+import { fetchParkImage } from './fetchImages.js';
+
+// both functions return Promises
+fetchParkData()
+  .then(parkData => {
+    console.log(parkData);
+    // Do something with the park data
+  })
+  .catch(error => {
+    console.error('Error fetching park data:', error);
+  });
+
+fetchParkImage()
+  .then(image => {
+    console.log(image);
+    // Do something with the park image
+  })
+  .catch(error => {
+    console.error('Error fetching park image:', error);
+  });
+
+ async function displayParksInDropdown(parkCode) {
+    const parkData = await fetchParkData();
+    const selectedPark = parkData.find(park => park.parkCode === parkCode);
+    
+    if (selectedPark) {
+        const parkImage = await fetchParkImage(parkCode);
+
+        const parkInfoDiv = document.getElementById('parkInfo');
+        parkInfoDiv.innerHTML = `
+        <h3>${selectedPark.fullName}</h3>
+        <p>${selectedPark.description}</p>
+        <p><strong>Location:</strong> ${selectedPark.states}</p>
+        <p><strong>Address:</strong> ${selectedPark.addresses[0].city}</p>
+        <p><strong>URL:</strong> <a href="${selectedPark.url}" target="_blank">${selectedPark.url}</a></p>
+        ${parkImage ? `<img src="${parkImage}" alt="${selectedPark.fullName} Image">` : ''}
+        `;
+        } else {
+            console.error('Selected park data not found.')
+        }
+}
+
+// Example of setting up an event listener for comment submission
+// Assume there's a form with `id="commentForm"` and inputs for parkId, userName, and userComment
+document.getElementById('commentForm').addEventListener('submit', event => {
+  event.preventDefault(); // Prevent form from submitting in the traditional way
+  const parkId = document.getElementById('parkId').value;
+  const userName = document.getElementById('userName').value;
+  const userComment = document.getElementById('userComment').value;
+  submitComment(parkId, userName, userComment);
+});
+import { searchParks, submitComment } from './fetchpark.js';
 
 var data = [
 	{
@@ -184,6 +258,7 @@ var data = [
 
 
 //*** Reflection on the issues: */
+//express package the dependencies wasen't installed
 
 // 1. The image API works, but the image itseld isn't loading.
 

@@ -1,0 +1,18 @@
+{
+  "name": "sba308a-javascript-web-app",
+  "version": "1.0.0",
+  "description": "US National Parks Web Application This is a small single-page JavaScript web application that allows users to explore information about national parks in the United States. It utilizes asynchronous JavaScript tools, fetch API to interact with the National Park Service (NPS) API, and Bootstrap for styling.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
